@@ -40,9 +40,9 @@ def get_ola_data(start_lat, start_long, end_lat, end_long):
     ola_data = []
     response = requests.get(u'{}/products'.format(settings.OLA_BASE_URL), params={
         u'pickup_lat': start_lat,
-        u'pickup_long': start_long,
+        u'pickup_lng': start_long,
         u'drop_lat': end_lat,
-        u'drop_long': end_long
+        u'drop_lng': end_long
     }, headers={
         u'X-APP-TOKEN': settings.OLA_XAPP_TOKEN
     })
@@ -65,11 +65,22 @@ def combine_rides_data(uber_data=None, ola_data=None):
     for item in uber_data:
         combined_data.append({
             u'source': u'uber',
-            u'data': item
+            u'data': {
+                u'display_name': item[u'display_name'],
+                u'low_estimate': item[u'low_estimate'],
+                u'high_estimate': item[u'high_estimate'],
+                u'currency': item[u'currency_code'],
+                u'eta': 0,
+            }
         })
     for item in ola_data:
         combined_data.append({
             u'source': u'ola',
-            u'data': item
+            u'data': {
+                u'display_name': item[u'category'],
+                u'low_estimate': item[u'amount_min'],
+                u'high_estimate': item[u'amount_max'],
+                u'eta': 1,
+            }
         })
     return combined_data

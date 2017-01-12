@@ -12,3 +12,4 @@ class RideEstimateParamsSerializer(rest_serializers.Serializer):
     start_long = rest_serializers.FloatField(min_value=-180, max_value=180, required=True)
     end_lat = rest_serializers.FloatField(min_value=-90, max_value=90, required=True)
     end_long = rest_serializers.FloatField(min_value=-180, max_value=180, required=True)
+    order_by = rest_serializers.IntegerField(min_value=1, max_value=3, required=False)
